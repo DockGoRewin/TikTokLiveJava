@@ -9,21 +9,17 @@ permissions:
 jobs:
   build:
     runs-on: ubuntu-latest
-
     steps:
-      - name: Checkout TikTokLiveJava
-        uses: actions/checkout@v4
+      - uses: actions/checkout@v4
 
-      - name: Set up Java 17
-        uses: actions/setup-java@v4
+      - uses: actions/setup-java@v4
         with:
           distribution: temurin
           java-version: '17'
+          cache: gradle
 
       - name: Build extractor
-        run: |
-          chmod +x gradlew
-          ./gradlew :extractor:jar --no-daemon
+        run: ./gradlew :extractor:jar --no-daemon
 
       - name: Collect JAR files
         run: |
@@ -31,8 +27,7 @@ jobs:
           cp extractor/build/libs/*.jar output/
           ls -lh output/
 
-      - name: Upload JAR artifacts
-        uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v4
         with:
           name: TikTokLiveJava
           path: output/*.jar
